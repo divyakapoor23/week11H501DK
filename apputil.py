@@ -25,8 +25,55 @@ from sklearn.decomposition import PCA
 def pca(X, n_components):
     pca_model = PCA(n_components=n_components)
     X_reduced = pca_model.fit_transform(X)
-    return X_reduced    
+    return X_reduced
+
+# Load diamonds dataset and extract numerical columns
+import seaborn as sns
+diamonds = sns.load_dataset('diamonds')
+diamonds_numeric = diamonds.select_dtypes(include=[np.number])
+
+def kmeans_diamonds(n, k):
+    """
+    Runs kmeans clustering on the first n rows of the numeric diamonds dataset.
+    
+    Parameters:
+    - n: number of rows to use from the dataset
+    - k: number of clusters
+    
+    Returns:
+    - centroids: cluster centroids
+    - labels: cluster assignments
+    """
+    X = diamonds_numeric.iloc[:n].values
+    return kmeans(X, k)
+
 ## Exercise 3
+# Write a function called `kmeans_timer(n, k, n_iter=5)` that does the following:
+# - runs the function `kmeans_diamonds(n, k)` exactly `n_iter` times, and saves the runtime for each run.
+# - returns the *average* time across the `n` runs, where "time" is in seconds.
+from time import time
+
+def kmeans_timer(n, k, n_iter=5):
+    """
+    Times the kmeans_diamonds function over multiple iterations.
+    
+    Parameters:
+    - n: number of rows to use from the dataset
+    - k: number of clusters
+    - n_iter: number of iterations to run (default=5)
+    
+    Returns:
+    - average time in seconds across all iterations
+    """
+    times = []
+    for _ in range(n_iter):
+        start = time()
+        kmeans_diamonds(n, k)
+        elapsed = time() - start
+        times.append(elapsed)
+    return np.mean(times)
+
+## Exercise 3 (original)
 # Use Scikit-Learn and NumPy to write a function `train_test_split(X,       
 # y, test_size)` that does the following:
 # - splits the numerical NumPy array `X` and the 1D NumPy array `y` into training and testing sets
