@@ -1,34 +1,41 @@
 # your code here
-## Exercise 1
-
-# Use Scikit-Learn and NumPy to write a function `kmeans(X, k)` that does the following:
-
-# - performs k-means clustering on a numerical NumPy array `X`
-# - returns a **tuple** `(centroids, labels)`, where
-#     - `centroids` is a 2D array of shape `(k, n_features)` containing the cluster centroids, and 
-#     - `labels` is a 1D array of shape `(n_samples,)` containing the index of the 
-#  assigned cluster for each row of `X`.
 import numpy as np
+import seaborn as sns
 from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split as sk_train_test_split
 def kmeans(X, k):
+    """
+    Performs k-means clustering on the data X.
+    Parameters:
+    - X: 2D NumPy array of shape (n_samples, n_features)
+    - k: number of clusters
+    Returns:
+    - centroids: 2D NumPy array of shape (k, n_features)
+    - labels: 1D NumPy array of shape (n_samples,)
+    """
     kmeans_model = KMeans(n_clusters=k)
     kmeans_model.fit(X)
     centroids = kmeans_model.cluster_centers_
     labels = kmeans_model.labels_
     return centroids, labels
 
-## Exercise 2
-# Use Scikit-Learn and NumPy to write a function `pca(X, n_components)` that does the following:
-# - performs Principal Component Analysis (PCA) on a numerical NumPy array `X`
-# - returns a 2D NumPy array of shape `(n_samples, n_components)`
-from sklearn.decomposition import PCA
+
 def pca(X, n_components):
+    """
+    Performs Principal Component Analysis (PCA) on the data X.
+    Parameters:
+    - X: 2D NumPy array of shape (n_samples, n_features)
+    - n_components: number of principal components to keep
+    Returns:
+    - X_reduced: 2D NumPy array of shape (n_samples, n_components)
+    """
     pca_model = PCA(n_components=n_components)
     X_reduced = pca_model.fit_transform(X)
     return X_reduced
 
 # Load diamonds dataset and extract numerical columns
-import seaborn as sns
+
 diamonds = sns.load_dataset('diamonds')
 diamonds_numeric = diamonds.select_dtypes(include=[np.number])
 
@@ -73,23 +80,23 @@ def kmeans_timer(n, k, n_iter=5):
         times.append(elapsed)
     return np.mean(times)
 
-## Exercise 3 (original)
-# Use Scikit-Learn and NumPy to write a function `train_test_split(X,       
-# y, test_size)` that does the following:
-# - splits the numerical NumPy array `X` and the 1D NumPy array `y` into training and testing sets
-# - returns a tuple `(X_train, X_test, y_train, y_test)`
-from sklearn.model_selection import train_test_split as sk_train_test_split
+
 def train_test_split(X, y, test_size):
+    """
+    Splits the numerical NumPy array `X` and the 1D NumPy array `y` into training and testing sets.
+    Returns a tuple `(X_train, X_test, y_train, y_test)`.
+    - `X_train` and `y_train` are the training sets
+    - `X_test` and `y_test` are the testing sets
+    """
     X_train, X_test, y_train, y_test = sk_train_test_split(X, y, test_size=test_size)
     return X_train, X_test, y_train, y_test     
-# - `X_train` and `y_train` are the training sets
-# - `X_test` and `y_test` are the testing sets
 
-## Bonus Exercise
-# Binary search with step counting for time complexity analysis
 step_count = 0
 
 def bin_search(n):
+    """
+    Performs binary search on an array of size n.
+    """ 
     global step_count
     step_count = 0
     
